@@ -1,0 +1,6 @@
+UI_PTBR = {
+	UI_prof_returner = "Returner",
+	UI_profdesc_returner = "Allows to return from the dead once your character died.",
+	UI_trait_Returned = "Returned",
+	UI_trait_ReturnedDesc = "Returns from the dead.",
+}
