@@ -96,8 +96,7 @@ function TheReturned.updatePlayerBoosts(player)
 end
 
 function TheReturned.OnCreatePlayer(id, player)
-
-    if player:HasTrait(TheReturned.Id) then
+    if player:HasTrait(TheReturned.trait) then
 		TheReturned.setPlayerTraits(player)
 		TheReturned.setPlayerLevels(player)
 		TheReturned.setPlayerBoosts(player)
@@ -110,13 +109,10 @@ function TheReturned.OnGameStart()
 end
 
 function TheReturned.OnPlayerDeath(player)
-
-    --if player:HasTrait(TheReturned.Id) then
-		TheReturned.updatePlayerTraits(player)
-		TheReturned.updatePlayerLevels(player)
-		TheReturned.updatePlayerBoosts(player)
-		--TheReturned.savePlayerData(player)
-	--end
+	TheReturned.updatePlayerTraits(player)
+	TheReturned.updatePlayerLevels(player)
+	TheReturned.updatePlayerBoosts(player)
+	--TheReturned.savePlayerData(player)
 end
 
 return TheReturned
