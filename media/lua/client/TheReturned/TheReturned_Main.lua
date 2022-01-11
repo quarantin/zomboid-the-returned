@@ -1,6 +1,9 @@
 local TheReturned = {}
 
 TheReturned.id = 'TheReturned'
+TheReturned.trait = 'Returner'
+TheReturned.levels = {}
+TheReturned.boosts = {}
 
 function TheReturned.savePlayerData(player)
 	local modData = player:getModData()[TheReturned.id]
@@ -10,7 +13,8 @@ function TheReturned.savePlayerData(player)
 end
 
 function TheReturned.loadPlayerData(player)
-	local modData = player:getModData():getOrCreate(TheReturned.id)
+	local modData = player:getModData()[TheReturned.id] or {}
+	player:getModData()[TheReturned.id] = modData
 	TheReturned.levels = modData.levels or {}
 	TheReturned.boosts = modData.boosts or {}
 end
@@ -45,7 +49,7 @@ end
 
 function TheReturned.setPlayerBoosts(player)
 
-    local prof = ProfessionFactory.getProfession(TheReturned.Id)
+    local prof = ProfessionFactory.getProfession(TheReturned.trait)
 
     for perk, boost in pairs(TheReturned.boosts) do
         prof:addXPBoost(perk, boost)
@@ -54,13 +58,13 @@ function TheReturned.setPlayerBoosts(player)
     player:getDescriptor():setProfessionSkills(prof)
 end
 
-function TheReturned.createPlayerRespawnTrait()
+function TheReturned.createRespawnTrait()
 
-	local trait = TraitFactory.addTrait('Returner', getText('UI_trait_Returner'), 0, getText('Returns from the dead.'), true, false)
+	local trait = TraitFactory.addTrait(TheReturned.trait, getText('UI_trait_Returner'), 0, getText('Returns from the dead.'), true, false)
 	local traits = TraitFactory.getTraits()
 
 	for i = 0, traits:size() - 1 do
-		TraitFactory.setMutualExclusive(TheReturned.id, traits:get(i):getType())
+		TraitFactory.setMutualExclusive(TheReturned.trait, traits:get(i):getType())
 	end
 end
 
@@ -97,7 +101,7 @@ function TheReturned.OnCreatePlayer(id, player)
 		TheReturned.setPlayerTraits(player)
 		TheReturned.setPlayerLevels(player)
 		TheReturned.setPlayerBoosts(player)
-		TheReturned.savePlayerData(player)
+		--TheReturned.savePlayerData(player)
     end
 end
 
@@ -107,12 +111,12 @@ end
 
 function TheReturned.OnPlayerDeath(player)
 
-    if player:HasTrait(TheReturned.Id) then
+    --if player:HasTrait(TheReturned.Id) then
 		TheReturned.updatePlayerTraits(player)
 		TheReturned.updatePlayerLevels(player)
 		TheReturned.updatePlayerBoosts(player)
-		TheReturned.savePlayerData(player)
-	end
+		--TheReturned.savePlayerData(player)
+	--end
 end
 
 return TheReturned

@@ -3,11 +3,11 @@ local TheReturned = require('TheReturned/TheReturned_Main')
 local BaseGameCharacterDetails_DoProfessions = BaseGameCharacterDetails.DoProfessions
 
 function BaseGameCharacterDetails.DoProfessions()
-	local prof = ProfessionFactory.addProfession('returner', getText('UI_prof_returner'), '', 0)
+	local prof = ProfessionFactory.addProfession(TheReturned.trait, getText('UI_prof_returner'), '', 0)
 	prof:setDescription('Respawn with same skills and traits.')
 
-	TheReturned.createPlayerRespawnTrait()
-	prof:addFreeTrait(TheReturned.id)
+	TheReturned.createRespawnTrait()
+	prof:addFreeTrait(TheReturned.trait)
 
 	BaseGameCharacterDetails.SetProfessionDescription(prof)
 	BaseGameCharacterDetails_DoProfessions(self)
@@ -30,5 +30,5 @@ function CharacterCreationProfession:resetBuild()
 end
 
 Events.OnCreatePlayer.Add(TheReturned.OnCreatePlayer)
-Events.OnGameStart.Add(TheReturned.OnGameStart)
+--Events.OnGameStart.Add(TheReturned.OnGameStart)
 Events.OnPlayerDeath.Add(TheReturned.OnPlayerDeath)
