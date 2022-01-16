@@ -120,8 +120,7 @@ function BaseGameCharacterDetails.DoProfessions()
 end
 
 function TheReturned.OnGameBoot()
-	ProfessionFactory.Reset()
-	BaseGameCharacterDetails.DoProfessions()
+	TheReturned.DoProfessions()
 end
 
 function TheReturned.OnCreatePlayer(playerId, player)
