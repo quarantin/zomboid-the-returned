@@ -17,6 +17,17 @@ function TheReturned.getBoostLevel(level)
 	return level
 end
 
+function TheReturned.toHashMap(table)
+
+	local hashmap = HashMap.new()
+
+	for k, v in pairs(table) do
+		hashmap:put(k, v)
+	end
+
+	return hashmap
+end
+
 function TheReturned.getPlayerData(player)
 
 	local playerData = {}
@@ -27,6 +38,7 @@ function TheReturned.getPlayerData(player)
 	playerData.hoursSurvived = player:getHoursSurvived()
 	playerData.profession = player:getDescriptor():getProfession()
 	playerData.weight = player:getNutrition():getWeight()
+	playerData.regularityMap = transformIntoKahluaTable(player:getFitness():getRegularityMap())
 
 	local xp = player:getXp()
 	local perks = PerkFactory.PerkList
@@ -60,6 +72,7 @@ function TheReturned.setPlayerData(player, playerData)
 	player:setHoursSurvived(playerData.hoursSurvived)
 	player:getDescriptor():setProfession(playerData.profession)
 	player:getNutrition():setWeight(playerData.weight)
+	player:getFitness():setRegularityMap(TheReturned.toHashMap(playerData.regularityMap))
 
 	local xp = player:getXp()
 
