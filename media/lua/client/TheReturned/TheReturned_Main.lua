@@ -34,6 +34,7 @@ function TheReturned.getPlayerData(player)
 
 	playerData.perks = {}
 	playerData.traits = {}
+	playerData.modData = player:getModData()
 	playerData.zombieKills = player:getZombieKills()
 	playerData.hoursSurvived = player:getHoursSurvived()
 	playerData.profession = player:getDescriptor():getProfession()
@@ -68,6 +69,7 @@ end
 
 function TheReturned.setPlayerData(player, playerData)
 
+	player:setTable(playerData.modData)
 	player:setZombieKills(playerData.zombieKills)
 	player:setHoursSurvived(playerData.hoursSurvived)
 	player:getDescriptor():setProfession(playerData.profession)
