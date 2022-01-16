@@ -26,6 +26,7 @@ function TheReturned.getPlayerData(player)
 	playerData.zombieKills = player:getZombieKills()
 	playerData.hoursSurvived = player:getHoursSurvived()
 	playerData.profession = player:getDescriptor():getProfession()
+	playerData.weight = player:getNutrition():getWeight()
 
 	local xp = player:getXp()
 	local perks = PerkFactory.PerkList
@@ -58,6 +59,7 @@ function TheReturned.setPlayerData(player, playerData)
 	player:setZombieKills(playerData.zombieKills)
 	player:setHoursSurvived(playerData.hoursSurvived)
 	player:getDescriptor():setProfession(playerData.profession)
+	player:getNutrition():setWeight(playerData.weight)
 
 	local xp = player:getXp()
 
