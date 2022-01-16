@@ -23,6 +23,7 @@ function TheReturned.getPlayerData(player)
 
 	playerData.perks = {}
 	playerData.traits = {}
+	playerData.zombieKills = player:getZombieKills()
 	playerData.profession = player:getDescriptor():getProfession()
 
 	local xp = player:getXp()
@@ -53,6 +54,7 @@ end
 
 function TheReturned.setPlayerData(player, playerData)
 
+	player:setZombieKills(playerData.zombieKills)
 	player:getDescriptor():setProfession(playerData.profession)
 
 	local xp = player:getXp()
