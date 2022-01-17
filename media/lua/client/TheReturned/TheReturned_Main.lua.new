@@ -1,8 +1,8 @@
 local TheReturned = {}
 
-TheReturned.modId = "TheReturned"
-TheReturned.trait = "Returned"
-TheReturned.profession = "returner"
+TheReturned.modId = 'TheReturned'
+TheReturned.trait = 'Returned'
+TheReturned.profession = 'returner'
 
 function TheReturned.getBoostLevel(level)
 
@@ -28,13 +28,24 @@ function TheReturned.toHashMap(table)
 	return hashmap
 end
 
-function TheReturned.getPlayerData(player)
+function TheReturned.isFirstConnection()
 
-	if TheReturned.currentServer then
-		for k, v in pairs(TheReturned.currentServer) do
-			print("DEBUG: " .. tostring(k) .. " = " .. tostring(v))
+	local firstTime = true
+	local reader = getModFileReader(TheReturned.modId, TheReturned.servers, true)
+	while true do
+
+		local line = reader:readLine()
+		if not line then
+			break
 		end
+
 	end
+
+	reader:close()
+	return firstTime
+end
+
+function TheReturned.getPlayerData(player)
 
 	local playerData = {}
 
@@ -106,7 +117,7 @@ function TheReturned.setPlayerData(player, playerData)
 	end
 end
 
-function TheReturned.AddTrait()
+function TheReturned.DoProfessions()
 
 	TraitFactory.addTrait(TheReturned.trait, getText("UI_trait_Returned"), 0, getText("UI_trait_ReturnedDesc"), true, false)
 
@@ -114,13 +125,51 @@ function TheReturned.AddTrait()
 	for i = 0, traits:size() - 1 do
 		TraitFactory.setMutualExclusive(TheReturned.trait, traits:get(i):getType())
 	end
-end
 
-function TheReturned.AddProfession()
-
-	local prof = ProfessionFactory.addProfession(TheReturned.profession, getText("UI_prof_returner"), "profession_" .. TheReturned.profession, 0)
-
+	local prof = ProfessionFactory.addProfession(TheReturned.profession, getText("UI_prof_returner"), 'profession_' .. TheReturned.profession, 0)
 	prof:addFreeTrait(TheReturned.trait)
 end
 
-return TheReturned
+BaseGameCharacterDetails.originalDoProfessions = BaseGameCharacterDetails.DoProfessions
+function BaseGameCharacterDetails.DoProfessions()
+	TheReturned.DoProfessions()
+	BaseGameCharacterDetails.originalDoProfessions()
+end
+
+function TheReturned.OnGameBoot()
+
+	TheReturned.servers = {}
+	for _, server in pairs(getServerList()) do
+		TheReturned.servers[server.name] = true
+	end
+end
+
+function TheReturned.OnConnected()
+
+	ProfessionFactory.Reset()
+	BaseGameCharacterDetails.DoProfessions()
+end
+
+function TheReturned.OnCreatePlayer(playerId, player)
+
+	local modData = ModData.get(TheReturned.modId)
+	if modData then
+
+		local playerData = modData[getCurrentUserSteamID()]
+		if playerData and player:HasTrait(TheReturned.trait) then
+			TheReturned.setPlayerData(player, playerData)
+		end
+
+	end
+end
+
+function TheReturned.OnPlayerDeath(player)
+	local modData = ModData.getOrCreate(TheReturned.modId)
+	modData[getCurrentUserSteamID()] = TheReturned.getPlayerData(player)
+	ModData.transmit(TheReturned.modId)
+end
+
+Events.OnGameBoot.Add(TheReturned.OnGameBoot)
+Events.OnConnected(TheReturned.OnConnected)
+Events.OnCreatePlayer.Add(TheReturned.OnCreatePlayer)
+Events.OnPlayerDeath.Add(TheReturned.OnPlayerDeath)
