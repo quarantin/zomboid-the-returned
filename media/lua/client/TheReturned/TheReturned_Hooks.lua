@@ -2,8 +2,8 @@ local TheReturned = require("TheReturned/TheReturned")
 
 TheReturned.DoTraits = BaseGameCharacterDetails.DoTraits
 function BaseGameCharacterDetails.DoTraits()
-	TheReturned.AddTrait()
 	TheReturned.DoTraits()
+	TheReturned.AddTrait()
 end
 
 TheReturned.DoProfessions = BaseGameCharacterDetails.DoProfessions
