@@ -28,6 +28,23 @@ function TheReturned.toHashMap(table)
 	return hashmap
 end
 
+function TheReturned.debugPlayerData(playerData)
+
+	for k, v in pairs(playerData) do
+		print('DEBUG: THE RETURNED: ' .. tostring(k) .. " " .. tostring(v))
+		if type(v) == 'table' then
+			for i, j in pairs(v) do
+				print('DEBUG: THE RETURNED:     - ' .. tostring(i) .. " " .. tostring(j))
+				if type(j) == 'table' then
+					for m, n in pairs(j) do
+						print('DEBUG: THE RETURNED:         - ' .. tostring(m) .. " " .. tostring(n))
+					end
+				end
+			end
+		end
+	end
+end
+
 function TheReturned.getPlayerData(player)
 
 	if TheReturned.currentServer then
@@ -70,10 +87,13 @@ function TheReturned.getPlayerData(player)
 		table.insert(playerData.traits, traits:get(i))
 	end
 
+	TheReturned.debugPlayerData(playerData)
 	return playerData
 end
 
 function TheReturned.setPlayerData(player, playerData)
+
+	TheReturned.debugPlayerData(playerData)
 
 	player:setTable(playerData.modData)
 	player:setZombieKills(playerData.zombieKills)
@@ -103,6 +123,15 @@ function TheReturned.setPlayerData(player, playerData)
 	traits:clear()
 	for _, trait in pairs(playerData.traits) do
 		traits:add(trait)
+	end
+
+	player:transmitModData()
+	sendPlayerStatsChange(player)
+	if getWorld():getGameMode() == "Multiplayer" then
+		print("DEBUG: THE RETURNED: SENDING PLAYER EXTRA INFO!")
+		sendPlayerExtraInfo(player)
+	else
+		print("DEBUG: THE RETURNED: NOT SENDING PLAYER EXTRA INFO!")
 	end
 end
 
