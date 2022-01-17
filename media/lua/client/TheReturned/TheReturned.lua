@@ -2,7 +2,7 @@ local TheReturned = {}
 
 TheReturned.modId = "TheReturned"
 TheReturned.trait = "Returned"
-TheReturned.profession = "returner"
+TheReturned.profession = "returned"
 
 function TheReturned.getBoostLevel(level)
 
@@ -108,7 +108,7 @@ end
 
 function TheReturned.AddTrait()
 
-	TraitFactory.addTrait(TheReturned.trait, getText("UI_trait_Returned"), 0, getText("UI_trait_ReturnedDesc"), true, false)
+	TraitFactory.addTrait(TheReturned.trait, getText("UI_trait_Returned"), 0, getText("UI_trait_ReturnedDesc"), true)
 
 	local traits = TraitFactory.getTraits()
 	for i = 0, traits:size() - 1 do
@@ -118,7 +118,7 @@ end
 
 function TheReturned.AddProfession()
 
-	local prof = ProfessionFactory.addProfession(TheReturned.profession, getText("UI_prof_returner"), "profession_" .. TheReturned.profession, 0)
+	local prof = ProfessionFactory.addProfession(TheReturned.profession, getText("UI_prof_" .. TheReturned.profession), "profession_" .. TheReturned.profession, 0)
 
 	prof:addFreeTrait(TheReturned.trait)
 end
